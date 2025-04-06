@@ -31,9 +31,9 @@ async function insertRecord(code, Msisdn) {
     // await sql.connect(config);
     const request = new sql.Request();
 
-    request.input("DiscountCode", sql.VarChar, code);
+    request.input("VoucherCode", sql.VarChar, code);
     request.input("Msisdn", sql.BigInt, Msisdn);
-    request.input("DiscountPolicyId", sql.UniqueIdentifier, policies[code]);
+    request.input("VoucherPolicyId", sql.UniqueIdentifier, policies[code]);
     request.input("IsDeleted", sql.Bit, 0);
     request.input(
       "CreatedAt",
@@ -42,11 +42,11 @@ async function insertRecord(code, Msisdn) {
     );
 
     const insertQuery = `
-        INSERT INTO dbo.UsedDiscounts (
-            Id, DiscountCode, Msisdn, DiscountPolicyId,
+        INSERT INTO dbo.UsedVouchers (
+            Id, VoucherCode, Msisdn, VoucherPolicyId,
             IsDeleted, CreatedAt
         ) VALUES (
-            NEWID(), @DiscountCode, @Msisdn, @DiscountPolicyId,
+            NEWID(), @VoucherCode, @Msisdn, @VoucherPolicyId,
             @IsDeleted, @CreatedAt
         )
     `;
@@ -76,10 +76,10 @@ async function runQuery() {
 
     const query = `
       SELECT TOP 1 Msisdn
-      FROM dbo.UsedDiscounts
-      WHERE DiscountPolicyId IN (${whereClause}) AND IsDeleted = 0
+      FROM dbo.UsedVouchers
+      WHERE VoucherPolicyId IN (${whereClause}) AND IsDeleted = 0
       GROUP BY Msisdn
-      HAVING COUNT(DISTINCT DiscountPolicyId) < @policyCount
+      HAVING COUNT(DISTINCT VoucherPolicyId) < @policyCount
     `;
 
     const result = await request.query(query);
