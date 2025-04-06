@@ -5,8 +5,8 @@ const sleep_successful = 1;
 const sleep_fail = 10 * 1000;
 
 const policies = {
-    paq1: "E4229EB5-F12F-44F9-BC1F-2512CC6B2B80",
-    paq2: "FEF26F4F-8CA4-49EB-AA7D-33E9F56E8453",
+    paq1: "FEF26F4F-8CA4-49EB-AA7D-33E9F56E8453",
+    paq2: "E4229EB5-F12F-44F9-BC1F-2512CC6B2B80",
     // paaq3: "B3D8C596-67DC-4533-8748-731871EB262C",
 }
 
