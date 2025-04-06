@@ -39,7 +39,7 @@ async function insertRecord(code, Msisdn) {
     const insertQuery = `
         INSERT INTO dbo.UsedDiscounts (
             Id, DiscountCode, Msisdn, DiscountPolicyId,
-            IsDeleted, SeqId, CreatedAt
+            IsDeleted, CreatedAt
         ) VALUES (
             NEWID(), @DiscountCode, @Msisdn, @DiscountPolicyId,
             @IsDeleted, @CreatedAt
