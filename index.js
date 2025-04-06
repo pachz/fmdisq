@@ -1,6 +1,9 @@
 require("dotenv").config();
 const sql = require("mssql");
 
+const sleep_successful = 1;
+const sleep_fail = 10 * 1000;
+
 const policies = {
     paaq1: "3BD25C81-B7DF-428C-83AE-3CA92F722DC7",
     paaq2: "C8D7B75F-D6BB-443F-ACEA-CB588F55150B",
@@ -20,6 +23,8 @@ const config = {
     trustServerCertificate: true,
   },
 };
+
+const sleep_time = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function insertRecord(code, Msisdn) {
   try {
@@ -57,7 +62,6 @@ async function insertRecord(code, Msisdn) {
 
 async function runQuery() {
   try {
-    await sql.connect(config);
 
     // Build query using parameterized values
     const request = new sql.Request();
@@ -79,21 +83,36 @@ async function runQuery() {
     `;
 
     const result = await request.query(query);
-    console.log("Result:", result.recordset);
 
     if (result?.recordset?.length > 0) {
         const Msisdn = result?.recordset[0].Msisdn;
+        console.log("Fixing:", Msisdn);
         for (const code in policies) {
             await insertRecord(code, Msisdn);
         }
     }
 
+    return result?.recordset.length ?? 0;
+
   } catch (err) {
     console.error("Error running query:", err);
   } finally {
-    await sql.close();
+    return 0;
   }
 }
 
-// setInterval(runQuery, 60 * 1000);
-runQuery();
+
+(async () => {
+    await sql.connect(config);
+    console.log('Connected to SQL Server...');
+
+    while(true) {
+        const count = await runQuery();
+        if(count > 0) {
+            await sleep_time(sleep_successful);
+        } else {
+            console.log('No matching Msisdn found. Sleeping...', sleep_fail);
+            await sleep_time(sleep_fail);
+        }
+    }
+})();
