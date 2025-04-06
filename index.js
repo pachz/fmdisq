@@ -5,9 +5,9 @@ const sleep_successful = 1;
 const sleep_fail = 10 * 1000;
 
 const policies = {
-    paaq1: "3BD25C81-B7DF-428C-83AE-3CA92F722DC7",
-    paaq2: "C8D7B75F-D6BB-443F-ACEA-CB588F55150B",
-    paaq3: "B3D8C596-67DC-4533-8748-731871EB262C",
+    paq1: "E4229EB5-F12F-44F9-BC1F-2512CC6B2B80",
+    paq2: "FEF26F4F-8CA4-49EB-AA7D-33E9F56E8453",
+    // paaq3: "B3D8C596-67DC-4533-8748-731871EB262C",
 }
 
 const policyIds = Object.values(policies);
