@@ -21,13 +21,13 @@ const config = {
   },
 };
 
-async function insertRecord(code, Msidn) {
+async function insertRecord(code, Msisdn) {
   try {
     // await sql.connect(config);
     const request = new sql.Request();
 
     request.input("DiscountCode", sql.VarChar, code);
-    request.input("Msidn", sql.BigInt, Msidn);
+    request.input("Msisdn", sql.BigInt, Msisdn);
     request.input("DiscountPolicyId", sql.UniqueIdentifier, policies[code]);
     request.input("IsDeleted", sql.Bit, 0);
     request.input(
@@ -38,16 +38,16 @@ async function insertRecord(code, Msidn) {
 
     const insertQuery = `
         INSERT INTO dbo.UsedDiscounts (
-            Id, DiscountCode, Msidn, DiscountPolicyId,
+            Id, DiscountCode, Msisdn, DiscountPolicyId,
             IsDeleted, SeqId, CreatedAt
         ) VALUES (
-            NEWID(), @DiscountCode, @Msidn, @DiscountPolicyId,
+            NEWID(), @DiscountCode, @Msisdn, @DiscountPolicyId,
             @IsDeleted, @CreatedAt
         )
     `;
 
     await request.query(insertQuery);
-    console.log("Record insert successful.", code, Msidn);
+    console.log("Record insert successful.", code, Msisdn);
   } catch (err) {
     console.error("Insert failed:", err);
   } finally {
